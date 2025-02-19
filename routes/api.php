@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Response;
 
-Route::get('/accountinfo', function (Request $request) {
+Route::any('/accountinfo', function (Request $request) {
     // Obtém o token do cabeçalho Authorization
     $token = $request->bearerToken();
 
