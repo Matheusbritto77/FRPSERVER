@@ -1,9 +1,9 @@
 <?php
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/accountinfo', function (Request $request) {
+Route::get('/index.php', function (Request $request) {
     return Response::json([
         "status" => "success",
         "message" => "Account information retrieved successfully.",
@@ -18,4 +18,4 @@ Route::get('/accountinfo', function (Request $request) {
             "updated_at" => "2024-02-19T15:00:00Z"
         ]
     ]);
-})->middleware('auth:sanctum');
+});
