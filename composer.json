@@ -4,7 +4,9 @@
     "type": "project",
     "require": {
         "doctrine/orm": "^2.10",
-        "symfony/cache": "^7.2"
+        "symfony/cache": "^7.2",
+        "zircote/swagger-php": "^5.0",
+        "swagger-api/swagger-ui": "^5.19"
     },
     "scripts": {
         "doctrine": "vendor/bin/doctrine"
