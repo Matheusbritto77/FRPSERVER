@@ -33,12 +33,18 @@ class ComposerStaticInit44314f631e59b27a77bab6a949d66da0
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Cache\\' => 24,
         ),
+        'R' => 
+        array (
+            'ReCaptcha\\' => 10,
+        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
             'PhpParser\\' => 10,
+            'PHPMailer\\PHPMailer\\' => 20,
+            'PHPAuth\\' => 8,
         ),
         'O' => 
         array (
@@ -116,6 +122,10 @@ class ComposerStaticInit44314f631e59b27a77bab6a949d66da0
         array (
             0 => __DIR__ . '/..' . '/symfony/cache',
         ),
+        'ReCaptcha\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/recaptcha/src/ReCaptcha',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
@@ -131,6 +141,14 @@ class ComposerStaticInit44314f631e59b27a77bab6a949d66da0
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'PHPAuth\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpauth/phpauth/sources',
         ),
         'OpenApi\\' => 
         array (

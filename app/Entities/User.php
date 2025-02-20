@@ -4,63 +4,97 @@ namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
-#[ORM\Table(name: "users")]
-#[ORM\HasLifecycleCallbacks]
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="phpauth_users")
+ */
 class User
 {
-    #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    #[ORM\GeneratedValue]
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue
+     */
     private int $id;
 
-    #[ORM\Column(type: "string", length: 100)]
-    private string $name;
-
-    #[ORM\Column(type: "string", unique: true, length: 150)]
+    /**
+     * @ORM\Column(type="string", length=100, unique=true)
+     */
     private string $email;
 
-    #[ORM\Column(type: "string", length: 255)]
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private string $password;
 
-    #[ORM\Column(type: "string", unique: true, nullable: true, length: 64)]
-    private ?string $apiKey = null;
+    /**
+     * @ORM\Column(type="boolean", options={"default"=true})
+     */
+    private bool $isactive = true;
 
-    #[ORM\Column(type: "datetime")]
-    private \DateTime $createdAt;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $token = null;
 
-    #[ORM\Column(type: "datetime", nullable: true)]
-    private ?\DateTime $updatedAt = null;
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private \DateTime $dt;
 
-    public function __construct()
+    // Getters and Setters
+    public function getId(): int
     {
-        $this->createdAt = new \DateTime();
+        return $this->id;
     }
 
-    #[ORM\PreUpdate]
-    public function setUpdatedAt(): void
+    public function getEmail(): string
     {
-        $this->updatedAt = new \DateTime();
+        return $this->email;
     }
 
-    // Getters e Setters
-    public function getId(): int { return $this->id; }
-    
-    public function getName(): string { return $this->name; }
-    public function setName(string $name): void { $this->name = $name; }
-
-    public function getEmail(): string { return $this->email; }
-    public function setEmail(string $email): void { $this->email = $email; }
-
-    public function getPassword(): string { return $this->password; }
-    public function setPassword(string $password): void { 
-        $this->password = password_hash($password, PASSWORD_BCRYPT); 
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
     }
 
-    public function getApiKey(): ?string { return $this->apiKey; }
-    public function setApiKey(?string $apiKey): void { $this->apiKey = $apiKey; }
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
 
-    public function getCreatedAt(): \DateTime { return $this->createdAt; }
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
 
-    public function getUpdatedAt(): ?\DateTime { return $this->updatedAt; }
+    public function isActive(): bool
+    {
+        return $this->isactive;
+    }
+
+    public function setIsActive(bool $isactive): void
+    {
+        $this->isactive = $isactive;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): void
+    {
+        $this->token = $token;
+    }
+
+    public function getDt(): \DateTime
+    {
+        return $this->dt;
+    }
+
+    public function setDt(\DateTime $dt): void
+    {
+        $this->dt = $dt;
+    }
 }
