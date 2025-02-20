@@ -76,7 +76,7 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 $CustomField = json_decode(base64_decode($parameters['customfield']), true);
             
                 // Acesso ao EntityManager para persistir a ordem no banco de dados
-                $entityManager = require_once 'bootstrap.php'; // Acesso ao EntityManager configurado previamente
+                $entityManager = require_once '/../bootstrap.php'; // Acesso ao EntityManager configurado previamente
             
                 // Criar nova ordem e salvar o imei
                 $order = new \App\Entities\Order();
@@ -101,7 +101,7 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                     $OrderID = (int)$parameters['ID'];
                 
                     // Acesso ao EntityManager para consultar a ordem no banco de dados
-                    $entityManager = require_once 'bootstrap.php'; // Acesso ao EntityManager configurado previamente
+                    $entityManager = require_once '/../bootstrap.php'; // Acesso ao EntityManager configurado previamente
                 
                     // Procurar a ordem com o ID fornecido
                     $order = $entityManager->find(\App\Entities\Order::class, $OrderID);
