@@ -1,6 +1,6 @@
 <?php
 // Incluir o arquivo de configuração do banco de dados
-require_once __DIR__ . "/bootstrap.php"; // Importa o arquivo bootstrap.php que contém o Bootstrap
+require_once __DIR__ . "/bootstrap.php";
 
 $connectionStatus = '';
 
@@ -24,6 +24,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste de Conexão com Banco de Dados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
 
