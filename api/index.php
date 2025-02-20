@@ -48,9 +48,8 @@ if ($User = validateAuth($username, $apiaccesskey)) {
 
                 /*QNT*/
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['QNT'] = 1;
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['QNTOPTIONS'] = '10,20,50';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['MINQNT'] = '1'; /* QNTOPTIONS OR MIN/MAX QNT*/
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['MAXQNT'] = '1';
+
+                
 
 
               
@@ -60,7 +59,7 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 {
                     $CUSTOM[0]['type'] = 'serviceimei';
                     $CUSTOM[0]['fieldname'] = 'IMEI';
-                    $CUSTOM[0]['fieldtype'] = 'text'; /* text dropdown radio textarea tickbox datepicker time */
+                  
                     $CUSTOM[0]['description'] = '';
                     $CUSTOM[0]['fieldoptions'] = '';
                     $CUSTOM[0]['required'] = 1;
