@@ -75,13 +75,13 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 // Parâmetros recebidos
                 $ServiceId = (int)$parameters['ID'];
                 $CustomField = json_decode(base64_decode($parameters['customfield']), true);
-                
-                // Criação do arquivo de log
-                $logFile = 'order_log.txt';
+            
+                // Criação do arquivo de log na raiz do projeto
+                $logFile = __DIR__ . '/order_log.txt'; // Caminho absoluto para o arquivo de log
                 $logMessage = "[" . date('Y-m-d H:i:s') . "] - Place IMEI Order Request\n";
                 $logMessage .= "ServiceId: $ServiceId\n";
                 $logMessage .= "CustomField: " . print_r($CustomField, true) . "\n";
-            
+                
                 // Acesso ao EntityManager para persistir a ordem no banco de dados
                 $entityManager = require_once 'bootstrap.php'; // Acesso ao EntityManager configurado previamente
                 
@@ -90,11 +90,15 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 $order->setImei($CustomField['imei']); // Salva o IMEI no campo imei
                 $order->setStatus(1); // Define o status como 1 antes de salvar
                 
+                // Log de criação da ordem
+                $logMessage .= "Creating order with IMEI: " . $CustomField['imei'] . "\n";
+                $logMessage .= "Setting status to: 1\n";
+            
                 // Persistir a ordem no banco de dados
                 try {
                     $entityManager->persist($order);
                     $entityManager->flush();
-            
+                    
                     // Retornar o ID da ordem criada
                     $order_reff_id = $order->getId(); 
                     
@@ -109,7 +113,7 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                     $logMessage .= "Error: " . $e->getMessage() . "\n";
                     $apiresults['ERROR'][] = array('MESSAGE' => 'Failed to create order', 'ERROR' => $e->getMessage());
                 }
-            
+                
                 // Escrever no arquivo de log
                 file_put_contents($logFile, $logMessage, FILE_APPEND);
                 break;
