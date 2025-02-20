@@ -1,5 +1,10 @@
 <?php
 
+// Ativar o relatório de erros no PHP
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\DBAL\DriverManager;
