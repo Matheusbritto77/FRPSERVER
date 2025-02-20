@@ -72,27 +72,48 @@ if ($User = validateAuth($username, $apiaccesskey)) {
 
 
             case "placeimeiorder":
+                // Parâmetros recebidos
                 $ServiceId = (int)$parameters['ID'];
                 $CustomField = json_decode(base64_decode($parameters['customfield']), true);
+                
+                // Criação do arquivo de log
+                $logFile = 'order_log.txt';
+                $logMessage = "[" . date('Y-m-d H:i:s') . "] - Place IMEI Order Request\n";
+                $logMessage .= "ServiceId: $ServiceId\n";
+                $logMessage .= "CustomField: " . print_r($CustomField, true) . "\n";
             
                 // Acesso ao EntityManager para persistir a ordem no banco de dados
                 $entityManager = require_once 'bootstrap.php'; // Acesso ao EntityManager configurado previamente
-            
-                // Criar nova ordem e salvar o imei
+                
+                // Criar nova ordem e salvar o IMEI
                 $order = new \App\Entities\Order();
                 $order->setImei($CustomField['imei']); // Salva o IMEI no campo imei
                 $order->setStatus(1); // Define o status como 1 antes de salvar
-            
+                
                 // Persistir a ordem no banco de dados
-                $entityManager->persist($order);
-                $entityManager->flush();
+                try {
+                    $entityManager->persist($order);
+                    $entityManager->flush();
             
-                // Retornar o ID da ordem criada
-                $order_reff_id = $order->getId(); 
+                    // Retornar o ID da ordem criada
+                    $order_reff_id = $order->getId(); 
+                    
+                    // Log de sucesso
+                    $logMessage .= "Order successfully created with ID: $order_reff_id\n";
+                    $logMessage .= "Status set to: 1\n";
             
-                // Resultado da API
-                $apiresults['SUCCESS'][] = array('MESSAGE' => 'Order received', 'REFERENCEID' => $order_reff_id);
+                    // Resultado da API
+                    $apiresults['SUCCESS'][] = array('MESSAGE' => 'Order received', 'REFERENCEID' => $order_reff_id);
+                } catch (\Exception $e) {
+                    // Log de erro
+                    $logMessage .= "Error: " . $e->getMessage() . "\n";
+                    $apiresults['ERROR'][] = array('MESSAGE' => 'Failed to create order', 'ERROR' => $e->getMessage());
+                }
+            
+                // Escrever no arquivo de log
+                file_put_contents($logFile, $logMessage, FILE_APPEND);
                 break;
+            
             
 
        
