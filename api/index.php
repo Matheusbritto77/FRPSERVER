@@ -46,12 +46,6 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['INFO'] = utf8_encode('VERIFIQUE A PAGINA DE STATUS PARA SABER SE O SERVIDOR ESTA ONLINE AQUI : ');
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['TIME'] = '1-5 Minutes';
 
-              
-                
-
-
-              
-
                 /*Custom Fields*/
                 $CUSTOM = array();
                 {
@@ -67,8 +61,11 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.Custom'] = $CUSTOM;
             }
 
+
             $apiresults['SUCCESS'][] = array('MESSAGE' => 'IMEI Service List', 'LIST' => $ServiceList);
             break;
+
+
 
         case "placeimeiorder":
             $ServiceId = (int)$parameters['ID'];
@@ -88,30 +85,12 @@ if ($User = validateAuth($username, $apiaccesskey)) {
             }
             break;
 
-        case "placeimeiorderbulk":
-            /* Other Fusion 31- 59 api support for bulk submit */
-            /*Validate each orders in loop */
-            foreach ($parameters as $bulkReqId => $OrdersDetails) {
-
-                $ServiceId = (int)$OrdersDetails['ID'];
-                $CustomField = json_decode(base64_decode($OrdersDetails['customfield']), true);
-
-                if (validateCredits($User, $credit)) {
-                    /*  Process order and ger order reference id*/
-                    $order_reff_id = 2323;
-                    $apiresults[$bulkReqId]['SUCCESS'][] = array('MESSAGE' => 'Order received', 'REFERENCEID' => $order_reff_id);
-                } else {
-                    $apiresults[$bulkReqId]['ERROR'][] = array('MESSAGE' => 'Not enough credits');
-                }
-
-
-            }
-            break;
+       
 
         case "getimeiorder":
             $OrderID = (int)$parameters['ID'];
             $apiresults['SUCCESS'][] = array(
-                'STATUS' => 1, /* 0 - New , 1 - InProcess, 3 - Reject(Refund), 4- Available(Success)  */
+                'STATUS' => 4, /* 0 - New , 1 - InProcess, 3 - Reject(Refund), 4- Available(Success)  */
                 'CODE' => 'CODE');
             break;
 
