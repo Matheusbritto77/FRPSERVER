@@ -15,6 +15,9 @@
         }
     },
     "config": {
-        "vendor-dir": "vendor"
+        "vendor-dir": "vendor",
+        "platform": {
+            "php": "8.0"
+        }
     }
 }
