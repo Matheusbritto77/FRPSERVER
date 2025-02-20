@@ -13,11 +13,14 @@ class Order
     #[ORM\GeneratedValue]
     private int $id;
 
-    #[ORM\Column(type: "string", length: 255, unique: true)]  // Campo imei definido como string (texto)
+    #[ORM\Column(type: "string", length: 255)]  // Campo imei sem restrição única
     private string $imei;
 
-    #[ORM\Column(type: "integer", options: ['default' => 1])]  // Campo status definido como inteiro com valor padrão 1
-    private int $status = 1;  // Define o valor padrão para o status como 1
+    #[ORM\Column(type: "integer", options: ['default' => 1])]  // Campo status com valor padrão 1
+    private int $status = 1;
+
+    #[ORM\Column(type: "string", length: 255, nullable: true)]  // Novo campo 'code' como string (pode ser nulo)
+    private ?string $code = null;
 
     // Getters e Setters
     public function getId(): int
@@ -46,5 +49,15 @@ class Order
             throw new \InvalidArgumentException('Status must be 1, 3, or 4');
         }
         $this->status = $status;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(?string $code): void
+    {
+        $this->code = $code;
     }
 }

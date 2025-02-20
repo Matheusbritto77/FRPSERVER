@@ -2,11 +2,10 @@
 /**
  * DHRU Fusion api standards V6.1
  */
-
-
- require_once __DIR__ . "/bootstrap.php";
-
  
+ 
+require_once __DIR__ . "/../bootstrap.php";  // Caminho para o arquivo bootstrap.php
+
 session_name("DHRUFUSION");
 session_set_cookie_params(0, "/", null, false, true);
 session_start();
@@ -50,80 +49,135 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['INFO'] = utf8_encode('VERIFIQUE A PAGINA DE STATUS PARA SABER SE O SERVIDOR ESTA ONLINE AQUI : ');
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['TIME'] = '1-5 Minutes';
 
-                /*Custom Fields*/
-                $CUSTOM = array();
-                {
-                    $CUSTOM[0]['type'] = 'serviceimei';
-                    $CUSTOM[0]['fieldname'] = 'IMEI';
-                  
-                    $CUSTOM[0]['description'] = '';
-                    $CUSTOM[0]['fieldoptions'] = '';
-                    $CUSTOM[0]['required'] = 1;
+               
 
-                  
-                }
+
+              
+
+                
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.Custom'] = $CUSTOM;
             }
-
 
             $apiresults['SUCCESS'][] = array('MESSAGE' => 'IMEI Service List', 'LIST' => $ServiceList);
             break;
 
 
 
-            case "placeimeiorder":
-                $ServiceId = (int)$parameters['ID'];
-                $CustomField = json_decode(base64_decode($parameters['customfield']), true);
+case "placeimeiorder":
+    // Extrai os parâmetros de 'parameters' do JSON recebido
+    $dadosRecebidos = $_POST['parameters'] ?? null;
+
+    if ($dadosRecebidos) {
+        // Converte os parâmetros XML para um array
+        $xmlConvertido = simplexml_load_string($dadosRecebidos);
+        $imeiRecebido = (string) $xmlConvertido->IMEI ?? null;  // Pega o valor de IMEI
+        $campoPersonalizado = (string) $xmlConvertido->CUSTOMFIELD ?? null;  // Pega o valor de CUSTOMFIELD
+
+        if ($imeiRecebido && $campoPersonalizado) {
+            // Criar nova instância de Order
+            $novaOrdem = new \App\Entities\Order();
+            $novaOrdem->setImei($imeiRecebido);  // Define o valor de IMEI
+            $novaOrdem->setStatus(1);  // Status 1 (pode ser alterado conforme necessário)
+
+            // Persistir o pedido no banco de dados usando o EntityManager
+            $entityManager->persist($novaOrdem);
+            $entityManager->flush();  // Realiza o commit na base de dados
+
+            // Obtém o ID da ordem registrada (order_reff_id)
+            $idOrdemRegistrada = $novaOrdem->getId();
+
+            // Retorna os resultados com os dados extraídos
+            $apiresults['SUCCESS'][] = [
+                'MESSAGE' => 'Order received',
+                'REFERENCEID' => $idOrdemRegistrada,
+                'IMEI' => $imeiRecebido,
+                'CUSTOMFIELD' => $campoPersonalizado,  // CustomField sem decodificação
+            ];
+        } else {
+            $apiresults['ERROR'][] = [
+                'MESSAGE' => 'Missing IMEI or CustomField',
+            ];
+        }
+    } else {
+        $apiresults['ERROR'][] = [
+            'MESSAGE' => 'Missing parameters',
+        ];
+    }
+    break;
+
+
+
+
+
+
+        case "placeimeiorderbulk":
+            /* Other Fusion 31- 59 api support for bulk submit */
+            /*Validate each orders in loop */
+            foreach ($parameters as $bulkReqId => $OrdersDetails) {
+
+                $ServiceId = (int)$OrdersDetails['ID'];
+                $CustomField = json_decode(base64_decode($OrdersDetails['customfield']), true);
+
+                if (validateCredits($User, $credit)) {
+                    /*  Process order and ger order reference id*/
+                    $order_reff_id = 2323;
+                    $apiresults[$bulkReqId]['SUCCESS'][] = array('MESSAGE' => 'Order received', 'REFERENCEID' => $order_reff_id);
+                } else {
+                    $apiresults[$bulkReqId]['ERROR'][] = array('MESSAGE' => 'Not enough credits');
+                }
+
+
+            }
             
-                // Acesso ao EntityManager para persistir a ordem no banco de dados
-                $entityManager = require_once '/../bootstrap.php'; // Acesso ao EntityManager configurado previamente
             
-                // Criar nova ordem e salvar o imei
-                $order = new \App\Entities\Order();
-                $order->setImei($CustomField['imei']); // Salva o IMEI no campo imei
-                $order->setStatus(1); // Define o status como 1 antes de salvar
             
-                // Persistir a ordem no banco de dados
-                $entityManager->persist($order);
-                $entityManager->flush();
+            break;
             
-                // Retornar o ID da ordem criada
-                $order_reff_id = $order->getId(); 
             
-                // Resultado da API
-                $apiresults['SUCCESS'][] = array('MESSAGE' => 'Order received', 'REFERENCEID' => $order_reff_id);
-                break;
+            
             
 
-       
+case "getimeiorder":
+    // Extrai os parâmetros de 'parameters' do JSON recebido
+    $parameters = $_POST['parameters'] ?? null;
 
-                case "getimeiorder":
-                    $OrderID = (int)$parameters['ID'];
-                
-                    // Acesso ao EntityManager para consultar a ordem no banco de dados
-                    $entityManager = require_once '/../bootstrap.php'; // Acesso ao EntityManager configurado previamente
-                
-                    // Procurar a ordem com o ID fornecido
-                    $order = $entityManager->find(\App\Entities\Order::class, $OrderID);
-                
-                    // Verificar se a ordem foi encontrada
-                    if ($order) {
-                        // Obter o status da ordem
-                        $status = $order->getStatus();
-                
-                        // Retornar o número do status e código
-                        $apiresults['SUCCESS'][] = array(
-                            'STATUS' => $status,  // Retorna o número do status
-                            'CODE' => 'CODE'  // Pode ser substituído por um código dinâmico se necessário
-                        );
-                    } else {
-                        // Caso a ordem não seja encontrada, retorna erro
-                        $apiresults['ERROR'][] = array(
-                            'MESSAGE' => 'Order not found'
-                        );
-                    }
-                    break;
-                
+    if ($parameters) {
+        // Converte os parâmetros XML para um array
+        $xml = simplexml_load_string($parameters);
+        $id = (int) ($xml->ID ?? null);  // Pega o valor do ID e garante que seja um inteiro
+
+        if ($id) {
+            // Busca a ordem no banco de dados pelo ID
+            $order = $entityManager->find(\App\Entities\Order::class, $id);
+
+            if ($order) {
+                $apiresults['SUCCESS'][] = [
+                    'STATUS' => $order->getStatus(), // Retorna o status real do pedido
+                    'CODE' => $order->getCode() ?? null // Retorna o código ou null se não existir
+                ];
+            } else {
+                $apiresults['ERROR'][] = [
+                    'MESSAGE' => 'Order not found'
+                ];
+            }
+        } else {
+            $apiresults['ERROR'][] = [
+                'MESSAGE' => 'Missing ID parameter'
+            ];
+        }
+    } else {
+        $apiresults['ERROR'][] = [
+            'MESSAGE' => 'Missing parameters'
+        ];
+    }
+    break;
+
+
+            
+            
+            
+            
+            
 
         case "getimeiorderbulk":
             /* Other Fusion 31- 59 api support for bulk get */
@@ -142,6 +196,10 @@ if ($User = validateAuth($username, $apiaccesskey)) {
 } else {
     $apiresults['ERROR'][] = array('MESSAGE' => 'Authentication Failed');
 }
+
+
+
+
 
 
 
