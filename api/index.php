@@ -31,7 +31,7 @@ if ($User = validateAuth($username, $apiaccesskey)) {
 
         case "imeiservicelist":
             $ServiceList = NULL;
-            $Group = 'Service Group';
+            $Group = 'FRP SAMSUNG';
             $ServiceList[$Group]['GROUPNAME'] = $Group;
             $ServiceList[$Group]['GROUPTYPE'] = 'IMEI'; // IMEI OR SERVER OR REMOTE
 
@@ -42,15 +42,15 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['SERVICEID'] = $SERVICEID;
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['SERVICETYPE'] = 'IMEI'; // IMEI OR SERVER OR REMOTE
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['SERVICENAME'] = 'FRP IMEI BEST PRICE';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['CREDIT'] = 1;
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['INFO'] = utf8_encode('Service Information ');
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['TIME'] = '1-2 Minutes';
+                $ServiceList[$Group]['SERVICES'][$SERVICEID]['CREDIT'] = 0;
+                $ServiceList[$Group]['SERVICES'][$SERVICEID]['INFO'] = utf8_encode('VERIFIQUE A PAGINA DE STATUS PARA SABER SE O SERVIDOR ESTA ONLINE AQUI : ');
+                $ServiceList[$Group]['SERVICES'][$SERVICEID]['TIME'] = '1-5 Minutes';
 
                 /*QNT*/
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['QNT'] = 1;
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['QNTOPTIONS'] = '10,20,50';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['MINQNT'] = ''; /* QNTOPTIONS OR MIN/MAX QNT*/
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['MAXQNT'] = '';
+                $ServiceList[$Group]['SERVICES'][$SERVICEID]['MINQNT'] = '1'; /* QNTOPTIONS OR MIN/MAX QNT*/
+                $ServiceList[$Group]['SERVICES'][$SERVICEID]['MAXQNT'] = '1';
 
 
                 /* Other Fields if required only */
@@ -71,7 +71,7 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 $CUSTOM = array();
                 {
                     $CUSTOM[0]['type'] = 'serviceimei';
-                    $CUSTOM[0]['fieldname'] = 'USERNAME';
+                    $CUSTOM[0]['fieldname'] = 'IMEI';
                     $CUSTOM[0]['fieldtype'] = 'text'; /* text dropdown radio textarea tickbox datepicker time */
                     $CUSTOM[0]['description'] = '';
                     $CUSTOM[0]['fieldoptions'] = '';
