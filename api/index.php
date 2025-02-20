@@ -46,9 +46,7 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['INFO'] = utf8_encode('VERIFIQUE A PAGINA DE STATUS PARA SABER SE O SERVIDOR ESTA ONLINE AQUI : ');
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['TIME'] = '1-5 Minutes';
 
-                /*QNT*/
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['QNT'] = 1;
-
+              
                 
 
 
