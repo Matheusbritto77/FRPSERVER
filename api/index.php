@@ -53,19 +53,7 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['MAXQNT'] = '1';
 
 
-                /* Other Fields if required only */
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.Network'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.Mobile'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.Provider'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.PIN'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.KBH'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.MEP'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.PRD'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.Type'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.Reference'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.Locks'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.SN'] = 'Required';
-                $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.SecRO'] = 'Required';
+              
 
                 /*Custom Fields*/
                 $CUSTOM = array();
@@ -77,12 +65,7 @@ if ($User = validateAuth($username, $apiaccesskey)) {
                     $CUSTOM[0]['fieldoptions'] = '';
                     $CUSTOM[0]['required'] = 1;
 
-                    $CUSTOM[1]['type'] = 'serviceimei';
-                    $CUSTOM[1]['fieldname'] = 'USERTYPE';
-                    $CUSTOM[1]['fieldtype'] = 'dropdown'; /* text dropdown radio textarea tickbox datepicker time */
-                    $CUSTOM[1]['description'] = '';
-                    $CUSTOM[1]['fieldoptions'] = 'New,Existing'; /*If field type id radio or DropDown*/
-                    $CUSTOM[1]['required'] = 1;
+                  
                 }
                 $ServiceList[$Group]['SERVICES'][$SERVICEID]['Requires.Custom'] = $CUSTOM;
             }
