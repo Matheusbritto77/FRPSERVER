@@ -1,46 +1,26 @@
 <?php
 
+// routers/web.php
+
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+$routes = new RouteCollection();
+
 // Definindo as rotas
-$routes = [
-    '/' => 'home',    // Rota raiz
-    '/about' => 'about',
-    '/contact' => 'contact',
-];
+$routes->add('home', new Route('/', [
+    '_controller' => 'App\Controllers\HomeController::index'
+]));
 
-// Função para carregar a visualização
-function view($viewName) {
-    $viewPath = __DIR__ . '/../resources/views/' . $viewName . '.php';
-    
-    if (file_exists($viewPath)) {
-        include $viewPath;
-    } else {
-        echo 'Página não encontrada';
-    }
-}
+$routes->add('about', new Route('/about', [
+    '_controller' => 'App\Controllers\AboutController::index'
+]));
 
-// Função para definir a lógica de cada rota
-function home() {
-    view('home');  // Carrega a visualização home.php
-}
+$routes->add('contact', new Route('/contact', [
+    '_controller' => 'App\Controllers\ContactController::index'
+]));
 
-function about() {
-    view('about');  // Carrega a visualização about.php
-}
-
-function contact() {
-    view('contact');  // Carrega a visualização contact.php
-}
-
-// Função para rotear a requisição
-function route($url) {
-    global $routes;
-
-    // Se a URL for vazia ou '/', redireciona para a rota home
-    if ($url == '/' || empty($url)) {
-        call_user_func($routes['/']);  // Chama a função home()
-    } elseif (array_key_exists($url, $routes)) {
-        call_user_func($routes[$url]);  // Chama a função da rota correspondente
-    } else {
-        echo 'Página não encontrada';
-    }
-}
+// Retorna as rotas
+return $routes;
